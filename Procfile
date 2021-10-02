@@ -1,1 +1,1 @@
-web: gunicorn app:app
+web: python3 webapp.py --port 5000
