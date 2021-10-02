@@ -1,1 +1,1 @@
-worker: python3 webapp.py
+web: python3 webapp.py
