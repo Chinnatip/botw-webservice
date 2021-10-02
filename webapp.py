@@ -5,13 +5,15 @@ and view the inference results on the image in the browser.
 import argparse
 import io
 import os
+import requests
 from PIL import Image
 
 import torch
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, jsonify
+from io import BytesIO
+from hubconfig import _create
 
 app = Flask(__name__)
-
 
 @app.route("/", methods=["GET", "POST"])
 def predict():
@@ -43,9 +45,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Flask app exposing yolov5 models")
     parser.add_argument("--port", default=5000, type=int, help="port number")
     args = parser.parse_args()
-
-    model = torch.hub.load(
-        "ultralytics/yolov5", "yolov5s", pretrained=True, force_reload=True
-    ).autoshape()  # force_reload = recache latest code
+    model = _create(name='yolov5s', pretrained=True, channels=3, classes=1, autoshape=True, verbose=True)  # pretrained
     model.eval()
     app.run(host="0.0.0.0", port=args.port)  # debug=True causes Restarting with stat
