@@ -7,6 +7,8 @@ black
 matplotlib>=3.2.2
 numpy>=1.18.5
 opencv-python-headless==4.2.0.32
+gunicorn==19.7.1
+itsdangerous==0.24
 Pillow
 PyYAML>=5.3.1
 scipy>=1.4.1
