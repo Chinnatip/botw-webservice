@@ -1,1 +1,1 @@
-web: python3 webapp.py --port 5000
+worker: python3 webapp.py
