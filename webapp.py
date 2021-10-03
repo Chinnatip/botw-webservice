@@ -16,7 +16,7 @@ from hubconfig import _create
 app = Flask(__name__)
 
 @app.route("/", methods=["GET", "POST"])
-def predict():
+def webapp():
     if request.method == "POST":
         if "file" not in request.files:
             return redirect(request.url)
@@ -39,6 +39,27 @@ def predict():
         return redirect("static/image0.jpg")
 
     return render_template("index.html")
+
+
+DETECTION_URL = "/v1/object-detection/yolov5s"
+@app.route(DETECTION_URL, methods=["POST"])
+def predict():
+    if not request.method == "POST":
+        return
+
+    data = request.json
+
+    if data["url"]:
+        image_url = data["url"]
+        # image_bytes = image_file.read()
+        # img = Image.open(io.BytesIO(image_bytes))
+        # image_url = 'https://www.carrentpk.com/img/slider-bg1.png'
+        response = requests.get(image_url)
+        img = Image.open(BytesIO(response.content))
+
+        results = model(img, size=640)
+        data = results.pandas().xyxy[0].to_json(orient="records")
+        return data
 
 
 if __name__ == "__main__":
